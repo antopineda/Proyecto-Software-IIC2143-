@@ -1,0 +1,58 @@
+<nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+  <div class="container-fluid">
+    <%= link_to 'ClassMate', root_path, class: "navbar-brand" %>
+    <span class="navbar-brand border-start border-light mx-3" style="height: 40px;"></span>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <%= link_to 'Cursos', courses_path, class: "navbar-brand" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Mis solicitudes', enrollment_requests_path, class: "navbar-brand" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Nosotros', render_about_path, class: "navbar-brand" %>
+        </li>
+      </ul>
+
+      <! Sign up and Sign in buttons (top right of the page)>
+      <ul class="navbar-nav">
+      <% if current_user %>
+        <% if current_user.professor %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <%= current_user.name %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><%= link_to "Mi perfil", user_myprofile_path, class: "dropdown-item" %></li>
+              <li><%= link_to "Editar cuenta", edit_user_registration_path, class: "dropdown-item" %></li>
+              <li><%= link_to "Crear curso", new_course_path, class: "dropdown-item" %></li>
+              <li><%= link_to "Solicitudes pendientes", pending_requests_enrollment_requests_path, class: "dropdown-item" %></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><%= button_to "Cerrar sesión", destroy_user_session_path, method: :delete, class: "dropdown-item" %></li>
+            </ul>
+          </li>
+          <% else %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <%= current_user.name %>
+              </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><%= link_to "Mi perfil", user_myprofile_path, class: "dropdown-item" %></li>
+                <li><%= link_to "Editar cuenta", edit_user_registration_path, class: "dropdown-item" %></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><%= button_to "Cerrar sesión", destroy_user_session_path, method: :delete, class: "dropdown-item" %></li>
+            </ul>
+            </li>
+          <% end %>
+      <% else %>
+        <li class="nav-item"> <%= link_to "Únete al team!", new_user_registration_path, class: "nav-link"  %></li>
+        <li class="nav-item"> <%= link_to "Ingresa a tu cuenta", new_user_session_path, class: "nav-link"  %></li>
+      <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>

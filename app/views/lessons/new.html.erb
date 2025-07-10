@@ -1,0 +1,38 @@
+<h2><%= "Crea una clase para #{@course.title}" %></h2>
+
+<p> Crea y sube los módulos de clase a tus cursos para que tus estudiantes tengan material con el que estudiar! </p>
+
+<%= form_with(model: [@course, @lesson], multipart: true) do |form| %>
+
+    <div class="form-group">
+        <%= form.label :title, "Título de la clase" %>
+        <%= form.text_field :title, class: "form-control" %>
+    </div><br/>
+
+    <div class="form-group">
+        <%= form.label :content, "Describe de qué se trata esta clase aquí" %>
+        <%= form.text_area :content, class: "form-control" %>
+    </div><br/>
+
+    <div class="form-group">
+        <%= form.label :number_of_questions_in_quiz, "Número de preguntas para quiz" %>
+        <%= form.text_field :number_of_questions_in_quiz, class: "form-control" %>
+    </div><br/>
+
+    <!-- Campo para subir un archivo de video -->
+    <div class="form-group">
+        <%= form.label :video, "Sube acá el video de la clase" %>
+        <%= form.file_field :video, class: "form-control" %>
+    </div><br/>
+
+    <!-- Campo para subir un archivo PDF -->
+    <div class="form-group">
+        <%= form.label :pdf, "Sube acá el pdf de la clase" %>
+        <%= form.file_field :pdf, class: "form-control" %>
+    </div><br/>
+
+    <div class="actions">
+        <%= form.submit "Crear módulo", class: "btn btn-success" %>
+    </div>
+
+<% end %>

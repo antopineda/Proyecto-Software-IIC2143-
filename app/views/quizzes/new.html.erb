@@ -1,0 +1,10 @@
+<h1><%= "Crea un nuevo quiz para #{@lesson.title}" %></h1>
+
+<%= render "form", quiz: @quiz %>
+
+<br>
+
+<div>
+  <%= link_to "Volver", course_lesson_quizzes_path, class: "btn-back" %>
+</div>
+<br><br><br>

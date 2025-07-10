@@ -1,0 +1,37 @@
+<h2>Solicitudes de inscripción pendientes</h2>
+
+<% if @pending_requests.any? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Estudiante</th>
+        <th>Curso</th>
+        <th>Comprobante de pago</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @pending_requests.each do |request| %>
+        <tr>
+          <td><%= request.user.name %></td>
+          <td><%= request.course.title %></td>
+          <td>
+            <% if request.payment_proof.attached? %>
+              <%= link_to 'Descargar comprobante de pago', rails_blob_path(request.payment_proof, disposition: 'attachment'), class: 'text-primary' %>
+            <% else %>
+              <span>No hay comprobante adjunto</span>
+            <% end %>
+          </td>
+          <td>
+          <div class="d-flex">
+            <%= button_to 'Aceptar', enrollment_request_path(request, status: 'accepted'), method: :patch, class: 'btn btn-success me-2' %>
+            <%= button_to 'Rechazar', enrollment_request_path(request, status: 'rejected'), method: :patch, class: 'btn btn-danger' %>
+          </div>
+        </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No hay solicitudes pendientes.</p>
+<% end %>

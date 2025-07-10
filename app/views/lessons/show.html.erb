@@ -1,0 +1,69 @@
+<h2><%= @lesson.title %></h2>
+
+<%= simple_format(@lesson.content) %>
+
+<!-- Mostrar Video (si existe) -->
+<h6>Video de la clase</h6>
+<% if @lesson.video.attached? %>
+    <div class="mb-4">
+    <video width="640" height="360" controls>
+        <source src="<%= rails_blob_path(@lesson.video) %>" type="<%= @lesson.video.content_type %>">
+        Tu navegador no soporta la reproducción de videos.
+    </video>
+    </div>
+<% else %>
+    <% if current_user.id == @course.user_id %>
+        <p>Para añadir el video de la clase, súbelo en la sección correspondiente.</p>
+    <% else %>
+        <p>El/la profesor/a @profesor aún no ha añadido el video de la clase, mándale un mensaje para recordarle!</p>
+    <% end %>
+<% end %>
+
+<h6>PDF con Ejercicios</h6>
+<% if @lesson.pdf.attached? %>
+    <p>A continuación encontrarás el PDF de esta clase, ¡te recomiendo mucho hacerlos!</p>
+    <div class="mb-4 d-flex justify-content-center">
+        <!-- Previsualización del PDF con un parámetro de caché único -->
+        <iframe src="<%= rails_blob_path(@lesson.pdf, disposition: "inline") %>?<%= Time.now.to_i %>" width="80%" height="500px" style="border: none; max-width: 600px;">
+            Este navegador no soporta la previsualización de PDFs. Puedes
+            <%= link_to "descargar el PDF aquí", rails_blob_path(@lesson.pdf, disposition: "attachment"), class: "btn btn-primary" %>.
+        </iframe>
+    </div>
+    
+    <!-- Botón para descargar el PDF -->
+    <div class="d-flex justify-content-center">
+        <%= link_to "Descargar PDF", rails_blob_path(@lesson.pdf, disposition: "attachment"), class: "btn btn-primary mt-3" %>
+    </div>
+<% else %>
+    <% if current_user.id == @course.user_id %>
+        <p>Para añadir un PDF de la clase, súbelos en la sección correspondiente.</p>
+    <% else %>
+        <p>El profesor aún no ha añadido un PDF de la clase, ¡mándale un mensaje para recordarle!</p>
+    <% end %>
+<% end %>
+
+
+
+<h6>Revisa las evaluaciones disponibles para esta clase acá!</h6>
+<% if @lesson.quiz.present? %>
+    <p>A continuación encontrarás un PDF de esta clase, te recomiendo mucho hacerlos!</p>
+<% else %>
+    <% if current_user.id == @course.user_id %>
+        <p>Para ver y crear el quiz para esta lesson presiona el botón de abajo.</p>
+    <% else %>
+        <p>El profesor aún no ha añadido una evaluación para este curso, mándale un mensaje para recordarle!</p>
+    <% end %>
+<% end %>
+<div class="mb-3">
+    <%= link_to "Revisar quiz", course_lesson_quizzes_path(@course, @lesson), class: "btn btn-primary" %>
+</div>
+
+<% if current_user.id == @course.user_id or current_user.admin %>
+    <div class="mb-3">
+        <%= button_to "Eliminar esta lesson", course_lesson_path(@course, @lesson), method: :delete, class: "btn btn-danger" %>
+    </div>
+<% end %>
+
+<div class="mb-3">
+    <%= link_to "Volver al curso", course_path(@course), class: "btn-back" %>
+</div>

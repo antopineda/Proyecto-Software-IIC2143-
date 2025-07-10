@@ -1,0 +1,23 @@
+<h2> <%= "#{@review.title}" %> </h2>
+<br>
+<h5 class="card-title">
+    ⭐️ Calificación otorgada:
+    <span class="star-rating">
+        <% @review.calification.to_i.times do %>
+        ★
+        <% end %>
+    </span>
+</h5>
+<br>
+<h5 class="card-title">
+    🧑🏽‍💻 Opinión:
+</h5>
+<p><%= @review.body %>
+
+<% if current_user.id == @review.user_id or current_user.admin %>
+    <div class="mb-4">
+        <%= button_to "Eliminar esta review", course_review_path(@course, @review), method: :delete, class: "btn btn-danger mb-3" %>
+    </div>
+<% end %>
+
+<%= link_to "Volver al curso", course_path(@course), class: "btn-back" %>

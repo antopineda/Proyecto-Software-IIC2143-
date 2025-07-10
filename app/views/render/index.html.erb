@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ClassMate</title>
+</head>
+<body>
+    <h1> 📚 ClassMate </h1>
+
+    <% if current_user %>
+        Bienvenido/a <%= current_user.name %>!
+        <br><br>
+        <div class="container">
+            <h2>Cursos Actuales</h2>
+            <div class="row">
+                <% if @actual_courses.present? %>
+                    <% @actual_courses.each do |course| %>
+                        <div class="col-md-4">
+                            <div class="card mb-4 shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <%= link_to course.title, course_path(course), class: "text-decoration-none" %>
+                                    </h5>
+                                    <p class="card-text"><%= course.description %></p>
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                <% else %>
+                    <p>No tienes cursos pendientes. ¡Inscríbete a uno ya!</p>
+                <% end %>
+            </div>
+        </div>
+
+        <% if current_user.professor? %>
+            <div class="container">
+                <h2>Cursos Creados</h2>
+                <div class="row">
+                    <% if @created_courses.present? %>
+                        <% @created_courses.each do |course| %>
+                            <div class="col-md-4">
+                                <div class="card mb-4 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title
+                                            "><%= link_to course.title, course_path(course), class: "text-decoration-none" %>
+                                        </h5>
+                                        <p class="card-text"><%= course.description %></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <% end %>
+                    <% else %>
+                        <p>No tienes cursos creados aún.</p>
+                    <% end %>
+                </div>
+            </div>
+        <% end %>
+
+
+        <div class="container">
+            <h2>Cursos Completados </h2>
+            <div class="row">
+                <% if @completed_courses.present? %>
+                    <% @completed_courses.each do |course| %>
+                        <div class="col-md-4">
+                            <div class="card mb-4 shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title" >
+                                        <%= link_to course.title, course_path(course), class: "text-decoration-none" %>
+                                    </h5>
+                                    <p class="card-text"><%= course.description %></p>
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                <% else %>
+                    <p>No tienes cursos completados aún.</p>
+                <% end %>
+            </div>
+        </div>
+
+        <div class="container">
+            <h2>Cursos Abandonados</h2>
+            <div class="row">
+                <% if @histories.present? %>
+                    <% @histories.each do |course| %>
+                        <div class="col-md-4">
+                            <div class="card mb-4 shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <%= link_to course.title, course_path(course), class: "text-decoration-none" %>
+                                    </h5>
+                                    <p class="card-text"><%= course.description %></p>
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                <% else %>
+                    <p>No tienes cursos pasados aún.</p>
+                <% end %>
+            </div>
+        </div>
+
+    <% else %>
+        <p>Por favor, <%= link_to 'inicia sesión', new_user_session_path %> para acceder a tus cursos.</p>
+    <% end %>
+</body>
+</html>

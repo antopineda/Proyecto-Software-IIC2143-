@@ -1,0 +1,74 @@
+<h2> Edita los datos de tu cuenta! </h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+  <% if resource.errors.any? %>
+    <% flash[:alert] = resource.errors.full_messages.join(", ") %>
+  <% end %>
+
+  <h4> Datos personales </h4>
+
+  <div class="field">
+    <%= f.label :name, 'Nombre completo' %><br />
+    <%= f.text_field :name, value: resource.name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :age, 'Edad' %><br />
+    <%= f.number_field :age, value: resource.age %>
+  </div>
+
+  <div class="field">
+    <%= f.label :college, 'Colegio / Universidad' %><br />
+    <%= f.text_field :college, value: resource.college %>
+  </div>
+
+  <div class="field">
+    <%= f.label :knowledges, 'Descripción' %><br />
+    <%= f.text_area :knowledges, value: resource.knowledges %>
+  </div>
+
+  <div class="field">
+    <%= f.label :profile_picture, 'Foto de perfil' %><br />
+    <%= f.file_field :profile_picture %>
+  </div>
+
+  <div class="field">
+    <%= f.label :current_password, 'Contraseña actual' %> <i>(la necesitamos para confirmar los cambios)</i><br />
+    <%= f.password_field :current_password, autocomplete: "current-password" %>
+  </div><br />
+
+  <div class="actions">
+    <%= f.submit "Guardar datos personales", class: "btn btn-primary" %>
+  </div>
+<% end %><br />
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+
+  <h4> Cambia tu contraseña </h4>
+  <div class="field">
+    <%= f.label :password, 'Contraseña' %> <i>(si no deseas cambiarla, deja esta box en blanco)</i><br />
+    <%= f.password_field :password, autocomplete: "new-password" %>
+    <% if @minimum_password_length %>
+      <br />
+      <em><%= @minimum_password_length %> caracteres como mínimo! </em>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation, 'Confirmación de contraseña' %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :current_password, 'Contraseña actual' %> <i>(la necesitamos para confirmar los cambios)</i><br />
+    <%= f.password_field :current_password, autocomplete: "current-password" %>
+  </div><br />
+
+  <div class="actions">
+    <%= f.submit "Confirmar cambios", class: "btn btn-primary" %>
+  </div>
+<% end %><br />
+
+<h4>Cancelar cuenta</h4>
+
+<div> <%= button_to "Cerrar permanentemente cuenta", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete, class: "btn btn-danger" %></div><br />

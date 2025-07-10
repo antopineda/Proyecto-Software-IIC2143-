@@ -1,0 +1,41 @@
+<h2><%= "Crea una review para #{@course.title}" %></h2>
+<p> Es muy importante dejar feedback para el estudiante creador del curso, por lo que te invitamos a que dejes tu opinión al respecto! </p>
+
+<%= form_with(model: [@course, @review]) do |form| %>
+
+    <div class="form-group">
+        <%= form.label :title, "Título" %>
+        <%= form.text_field :title, class: "form-control" %>
+    </div><br/>
+
+    <div class="form-group">
+        <%= form.label :body, "Deja tu opinión aquí" %>
+        <%= form.text_area :body, class: "form-control" %>
+    </div><br/>
+
+    <div class="form-group">
+        <%= form.label :calification, "¿Qué calificación le pondrías a #{@course.title}?" %>
+        <div class="star-rating">
+            <%= form.radio_button :calification, 1, id: "star1" %>
+            <label for="star1" title="1 estrella">★</label>
+
+            <%= form.radio_button :calification, 2, id: "star2" %>
+            <label for="star2" title="2 estrellas">★★</label>
+
+            <%= form.radio_button :calification, 3, id: "star3" %>
+            <label for="star3" title="3 estrellas">★★★</label>
+
+            <%= form.radio_button :calification, 4, id: "star4" %>
+            <label for="star4" title="4 estrellas">★★★★</label>
+
+            <%= form.radio_button :calification, 5, id: "star5" %>
+            <label for="star5" title="5 estrellas">★★★★★</label>
+        </div>
+    </div><br/>
+
+    <div class="actions">
+        <%= form.submit "Enviar reseña", class: "btn btn-success mb-3" %>
+    </div>
+    <br/>
+
+<% end %>

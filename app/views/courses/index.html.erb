@@ -1,0 +1,51 @@
+<h1 class="page-title"> 👀 Cursos disponibles </h1>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto:wght@400&display=swap" rel="stylesheet">
+
+
+<!-- Barra de búsqueda con filtros -->
+<form class="form-inline mb-" method="get" action="<%= courses_path %>">
+  <div class="input-group">
+    <input class="form-control mr-sm-2" type="search" name="search" placeholder="Buscar por título, descripción, categoría o profesor" value="<%= params[:search] %>">
+    
+    <select class="custom-select mr-sm-2" name="category">
+      <option value="">Filtrar por categoría</option>
+      <% Course::COURSE_TYPES.each do |category| %>
+        <option value="<%= category %>" <%= 'selected' if params[:category] == category %>><%= category %></option>
+      <% end %>
+    </select>
+
+    <select class="custom-select mr-sm-2" name="professor">
+      <option value="">Filtrar por profesor</option>
+      <% User.where(professor: true).each do |professor| %>
+        <option value="<%= professor.name %>" <%= 'selected' if params[:professor] == professor.name %>><%= professor.name %></option>
+      <% end %>
+    </select>
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+  </div>
+</form>
+
+
+<% if @courses.empty? %>
+  <div class="alert alert-warning">
+    La búsqueda no arrojó resultados.
+  </div>
+<% else %>
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-10">
+        <% @courses.each do |course| %>
+          <div class ="card mt-3">
+            <div class="card-body">
+              <h5 class="card-title"><%= link_to course.title, course_path(course) %> | <%= "#{course.user.name}" %> | $<%= course.price %></h5>
+              <p class="card-text"><%= "#{time_ago_in_words(course.created_at)} ago" %></p>
+              <p class="card-text"><%= course.description %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+<br> <br>

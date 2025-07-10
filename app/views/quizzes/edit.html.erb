@@ -1,0 +1,9 @@
+<h1>🛠️ Edita este quiz</h1>
+
+<%= render "form2", quiz: @quiz %>
+
+<br>
+
+<div class="mb-3">
+  <%= link_to "Volver", course_lesson_quizzes_path(@course, @lesson, @quiz), class: "btn-back" %>
+</div>

@@ -1,0 +1,164 @@
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto:wght@400&display=swap" 
+rel="stylesheet">
+
+<h2><%= @course.title %></h2>
+
+<p>
+    ⭐️ Rating:
+    <% if !(@course.calification == nil) %>
+        <%= @course.calification %>
+    <% else %>
+        <%= "este curso aún no tiene una calificación." %>
+    <% end %>
+</p>
+<p>💵 Precio del curso: <%= @course.price %> CLP </p>
+
+<p>
+  📁 Categorías:
+  <% if @course.course_types.present? %>
+    <div class="d-flex flex-wrap">
+      <% @course.course_types.each do |course_type| %>
+        <div class="badge bg-light text-dark me-2 mb-2">
+          <%= course_type %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <%= "No hay categoría aún para el curso seleccionado" %>
+  <% end %>
+</p>
+
+<p>
+    <% if @course.description.present? %>
+        <%= "🧑🏽‍💻 Descripción: #{@course.description}" %>
+    <% else %>
+        <%= "No hay descripción aún para el curso seleccionado" %>
+    <% end %>
+</p>
+
+<div class="container mt-5">
+  <div class="row">
+      <div class="col-9">
+        <% @lessons.each do |lesson| %>
+            <div class ="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title"><%= link_to lesson.title, course_lesson_path(@course, lesson) %> </h5>
+                    <p class="card-text"><%= "#{time_ago_in_words(lesson.created_at)} ago" %></p>
+                    <p class="card-text"><%= lesson.content %></p>
+                </div>
+            </div>
+        <% end %>
+
+        <div class ="card mt-3">
+            <div class="card-body">
+                <% if @course.reviews.present? %>
+                    <h5 class="card-title"><%= link_to "Reviews sobre este curso", course_reviews_path(@course) %> </h5>
+                    <p class="card-text"><%= "Acá podrás ver las reviews que han dejado otros estudiantes sobre este curso. Te recomendamos mirarlas y leerlas con detención antes de inscribirte al curso." %></p>
+                <% else %>
+                    <h5 class="card-title"><%= link_to "Reviews sobre este curso", course_reviews_path(@course) %> </h5>
+                    <p class="card-text"><%= "Aún no hay reviews para este curso. ¡Sé el primero en dejar una opinión!" %></p>
+                <% end %>
+            </div>
+        </div>
+      </div>
+
+      <div class="col-3">
+      <div class="card mt-3">
+          <div class="card-body">
+
+              <h5 class="card-title"><%= "Miembros del curso (#{@contador} en total)"%></h5>
+              <p><strong>Profesor:</strong> <%= link_to @course.user.name, user_path(@professor), class: "text-decoration-none" %></p>
+
+              <ul class="list-group">
+                  <% @course.taken_by.each do |student| %>
+                      <li class="list-group-item">
+                          <%= link_to student.name, user_path(student), class: "text-decoration-none" %>
+                      </li>
+                  <% end %>
+              </ul>
+          </div>
+      </div>
+
+  </div>
+</div>
+<br/>
+
+<% if current_user.present? %>
+    <% if current_user.id == @course.user_id or current_user.admin == true %>
+        <!-- El usuario es el dueño del curso (profesor) -->
+        <div class="d-flex gap-2 flex-wrap mb-3">
+        <% if @room.present? %>
+          <%= link_to "Chat del curso", course_room_path(@course, @room), class: "btn btn-dark text-white" %>
+        <% else %>
+          <p class="me-2">Aún no has creado un chat para este curso.</p>
+        <% end %>
+        
+        <%= link_to "Ver solicitudes de inscripción", pending_for_course_course_enrollment_requests_path(@course), class: "btn btn-success" %>
+        <%= link_to 'Crear módulo', new_course_lesson_path(@course), class: 'btn btn-info text-white' %>
+        <%= link_to "Editar curso", edit_course_path(@course), class: "btn btn-primary" %>
+        <%= button_to "Eliminar curso", course_path(@course), method: :delete, data: { confirm: "¿Estás seguro de que quieres eliminar este curso?" }, class: "btn btn-danger" %>
+      </div>
+    <% elsif current_user.courses_taken.include?(@course) %>
+        <p>Ya estás inscrito en este curso.</p>
+      
+        <!-- Barra de progreso de lecciones -->
+        <h4> Progreso en el curso </h4>
+        <div class="progress">
+          <div class="progress-bar bg-success" role="progressbar" style="width: <%= @lesson_progress_percentage %>%;" aria-valuenow="<%= @lesson_progress_percentage %>" aria-valuemin="0" aria-valuemax="100">
+            <%= @lesson_progress_percentage.round(2) %>%
+          </div>
+        </div>
+        </div>
+        <br>
+
+        <!-- Mensaje opcional cuando el progreso es 0% -->
+        <% if @lesson_progress_percentage == 0 %>
+            <p class="text-center text-muted"> 0% </p>
+        <% end %>
+        <br>
+        
+        <% if @room.present? %>
+            <%= link_to "Chat del curso", course_room_path(@course, @room), class: "btn btn-info text-white mb-3" %>
+        <% else %>
+            <p>Aún no hay chat para este curso :(</p>
+        <% end %>
+
+        <%= button_to "Dejar el curso", unsubscribe_course_path(@course), method: :delete, class: "btn btn-danger mb-3" %>
+    <% elsif current_user.enrollment_requests.exists?(course: @course) %>
+        <% @enrollment_request = current_user.enrollment_requests.find_by(course: @course) %>
+        <% if @enrollment_request.pending? %>
+            <p>Solicitud de inscripción enviada (pendiente de aprobación).</p>
+            <%= button_to "Cancelar solicitud", cancel_course_enrollment_request_path(@course), method: :delete, class: "btn btn-danger mb-3" %>
+        <% elsif @enrollment_request.accepted? %>
+            <p>Ya eres parte de este curso :)</p>
+            <%= link_to "Chat del curso", "#" %> <!-- Enlace para los aceptados -->
+        <% else %>
+            <p> ⚠️ Tu solicitud anterior fue rechazada ⚠️ Puedes volver a solicitarla aquí.</p>
+            <%= form_with(url: course_enrollment_requests_path(@course), method: :post, local: true, multipart: true) do |form| %>
+                <div class="mb-3">
+                  <%= form.label :payment_proof, "<strong>Subir comprobante de pago</strong>".html_safe %>
+                  <br><br>
+                  <%= form.file_field :payment_proof, direct_upload: true %>
+                </div>
+          
+                <%= form.submit "Enviar solicitud", class: "btn btn-success mb-3" %>
+              <% end %>
+        <% end %>
+    <% else %>
+        <%= form_with(url: course_enrollment_requests_path(@course), method: :post, local: true, multipart: true) do |form| %>
+        <div class="mb-3">
+            <%= form.label :payment_proof, "<strong>Subir comprobante de pago</strong>".html_safe %>
+            <br><br> 
+            <%= form.file_field :payment_proof, direct_upload: true %>
+        </div>
+        
+        <%= form.submit "Enviar solicitud", class: "btn btn-success mb-3" %>
+        <% end %>
+        <br>
+        
+    <% end %>
+    <br>
+<% end %>
+<br>
+<%= link_to "Volver a cursos", courses_path, class: "btn-back" %>
+<br> <br>

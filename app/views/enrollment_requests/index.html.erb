@@ -1,0 +1,34 @@
+<h1>Mis Solicitudes</h1>
+<% if @enrollment_requests.any? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Curso</th>
+        <th>Estado</th>
+        <th>Fecha de Solicitud</th>
+        <th>Archivos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @enrollment_requests.each do |request| %>
+        <tr>
+          <td><%= request.course.title %></td>
+          <td>
+            <span class="badge <%= request.status == 'accepted' ? 'bg-success' : request.status == 'rejected' ? 'bg-danger' : 'bg-info' %>">
+              <%= request.status.capitalize %>
+            </span>
+          </td>
+          <td><%= request.created_at.strftime("%d/%m/%Y") %></td>
+          <td>
+            <% if request.payment_proof.attached? %>
+              <%= link_to 'Ver comprobante', rails_blob_path(request.payment_proof, disposition: 'attachment'), class: 'text-primary' %>
+            <% else %>
+              <span>No hay comprobante adjunto</span>
+            <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No tienes solicitudes pendientes.</p>
+<% end %>

@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "@stimulus-components/rails-nested-form": "^5.0.0",
+    "stimulus-rails-nested-form": "^4.1.0"
+  }
+}

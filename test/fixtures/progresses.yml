@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  lesson: one
+  quiz: one
+  completed_lesson: false
+  completed_quiz: false
+
+two:
+  user: two
+  lesson: two
+  quiz: two
+  completed_lesson: false
+  completed_quiz: false

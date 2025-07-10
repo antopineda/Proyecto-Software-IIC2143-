@@ -1,0 +1,55 @@
+<h2><%= "Reviews para #{@course.title}" %> </h2>
+
+<% if @course.reviews.present? %>
+    <p class="card-text"><%= "Acá encontrarás la opinión de estudiantes que han tomado el curso y han decidido compartir su experiencia contigo." %></p>
+<% else %>
+    <p class="card-text"><%= "Aún no hay reviews para este curso. ¡Sé el primero en dejar una opinión!" %></p>
+<% end %>
+
+<div class="container mt-5">
+  <div class="row">
+      <div class="col-1">
+      </div>
+      <div class="col-10">
+        <% @reviews.each do |review| %>
+            <div class ="card mt-3">
+                <div class="card-body">
+                    
+                    <h5 class="card-title">
+                        <%= link_to review.title, course_review_path(@course, review)%>
+                        
+                        <!-- Mostrar estrellas según la calificación -->
+                        <span class="star-rating">
+                            | 
+                            <% review.calification.to_i.times do %>
+                            ★
+                            <% end %>
+                        </span>
+                    </h5>
+                    <p class="card-text"><%= "#{time_ago_in_words(review.created_at)} ago - Escrita por #{User.find(review.user_id).name}" %></p>
+                    <p class="card-text"><%= review.body %></p>
+                </div>
+            </div>
+        <% end %>
+      </div>
+  </div>
+</div>
+<br>
+
+<% if user_signed_in? %>
+    <% condition = true %>
+    <% if @reviews.present? %>
+        <% @reviews.each do |review| %>
+            <% if current_user.id == review.user_id %>
+                <% condition = false %>
+            <% end %>
+        <% end %>
+    <% end %>
+
+    <% if current_user.courses_taken.include?(@course) && condition == true %>
+        <%= link_to 'Deja tu opinión!', new_course_review_path(@course), class: 'btn btn-info text-white mb-3' %>
+    <% end %>
+    <br>
+<% end %>
+
+<%= link_to "Volver al curso", course_path(@course), class: "btn-back" %>

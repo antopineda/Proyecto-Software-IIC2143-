@@ -1,0 +1,52 @@
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto:wght@400&display=swap" 
+rel="stylesheet">
+
+<h1 class="page-title">Crear Curso</h1>
+
+<%= form_with(model: @course) do |form| %>
+
+  <div>
+    <% @course.errors.each do |error| %>
+    <ul>r
+      <li><%= error.full_message %></li>
+    </ul>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+        <%= form.label :title, "Nombre del curso" %>
+        <%= form.text_field :title, class: "form-control" %>
+    </div>
+  
+  <br/>
+
+  <div class="form-group">
+        <%= form.label :description, "Descripción" %>
+        <%= form.text_area :description, class: "form-control" %>
+    </div>
+  
+  <br/>
+
+  <div class="form-group">
+        <%= form.label :price, "Precio" %>
+        <%= form.number_field :price, class: "form-control", min: 0 %>
+  </div>
+  <br/>
+
+  <div class="form-group">
+  <%= form.label :course_types, "Categorías (elige de 1 a 3)" %>
+  <%= form.collection_check_boxes(:course_types, Course::COURSE_TYPES, :to_s, :to_s) do |b| %>
+    <div class="form-check">
+      <%= b.check_box(class: "form-check-input") %>
+      <%= b.label(class: "form-check-label", style: "font-weight: normal; font-size: 16px;") %>
+    </div>
+  <% end %>
+  </div>
+  <br/>
+
+  <div>
+    <%= form.submit "Crear curso", class: "btn btn-primary mb-3" %>
+  </div>
+
+<% end %>
+<br>

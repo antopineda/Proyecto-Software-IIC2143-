@@ -1,0 +1,43 @@
+<p style="color: green"><%= notice %></p>
+
+<%= form_with(url: course_lesson_quiz_submissions_path(@course, @lesson, @quiz), local: true, method: :post) do |form| %>
+  <% @quiz.questions.each_with_index do |question, index| %>
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Pregunta <%= index + 1 %>:</h5>
+        <p class="card-text"><%= question.content %></p>
+        <% if question.image.attached? %>
+          <%= image_tag question.image, class: "img-fluid mb-3" %>
+        <% end %>
+        <% 1.upto(4) do |answer_index| %>
+          <div class="form-check">
+            <%= form.radio_button "question_#{question.id}", answer_index, class: "form-check-input" %>
+            <%= form.label "question_#{question.id}_#{answer_index}", question.send("answer#{answer_index}"), class: "form-check-label" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <% if !(current_user.id == @course.user_id) %>
+    <div class="mb-3">
+      <%= form.submit "Enviar respuestas", class: "btn btn-success" %>
+    </div>
+  <% end %>
+<% end %>
+
+<div class="row">
+  <div class="col-1">
+    <% if current_user.id == @course.user_id or current_user.admin %>
+      <%= link_to "Editar quiz", edit_course_lesson_quiz_path(@course, @lesson, @quiz), class: "btn btn-primary"%>
+    <% end %>
+  </div>
+
+  <div class="col-2">
+    <% if current_user.id == @course.user_id or current_user.admin %>
+      <%= button_to "Eliminar quiz", course_lesson_quiz_path(@course, @lesson, @quiz), method: :delete, class: "btn btn-danger mb-3" %>
+    <% end %>
+  </div>
+</div>
+
+
+<%= link_to "Volver", course_lesson_quizzes_path(@course, @lesson), class: "btn-back mb-3" %>

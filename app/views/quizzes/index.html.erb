@@ -1,0 +1,48 @@
+<p style="color: green"><%= notice %></p>
+
+<h1><%= "🤔 Quiz para #{@lesson.title}" %></h1>
+<% if @quiz.present? %>
+  <% if Submission.exists?(quiz: @quiz) %>
+    <p>Como dato curioso, el puntaje promedio para este quiz es de <strong><%= "#{@average_score.round(2)}%. 📊" %></strong></p>
+  <% end %>
+
+  <% if !(current_user.id == @course.user_id or current_user.admin) %>
+    <% if !(Submission.exists?(quiz: @quiz, user: current_user)) %>
+      <p> Realiza el quiz para testear lo aprendido. Te servirá para identificar tus puntos fuertes y débiles sobre la materia de esta clase. </p>
+      <div class="mb-3">
+        <%= link_to "Realizar esta evaluación", course_lesson_quiz_path(@course, @lesson, @quiz.id), class: "btn btn-primary" %>
+      </div>
+    <% else %>
+      <p> Revisa tus resultados clickeando acá abajo! </p>
+      <div class="mb-3">
+        <%= link_to "Revisar resultados", course_lesson_quiz_submission_path(@course, @lesson, @quiz, @submission), class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  <% else %>
+    <p> Revisa, edita o elimina el quiz clickeando acá abajo! </p>
+    <div class="mb-3">
+      <%= link_to "Revisar esta evaluación", course_lesson_quiz_path(@course, @lesson, @quiz.id), class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
+<% else %>
+  <% if current_user.id == @course.user_id or current_user.admin %>
+    <p> Aún no has subido el quiz para esta lesson, hazlo cuanto antes para que tus estudiantes puedan ejercitar lo aprendido! </p>
+  <% else %>
+    <p> El quiz no está disponible aún para esta lesson. Escríbele a tu profesor para que lo publique pronto! </p>
+  <% end %>
+<% end %>
+
+
+<% if current_user.id == @course.user_id %>
+  <% if !(@quiz.present?) %>
+    <div class="mb-3">
+      <%= link_to "Crear nuevo quiz", new_course_lesson_quiz_path, class: "btn btn-info text-white" %>
+    </div>
+  <% end %>
+<% end %>
+
+<!-- Volver a la lección -->
+<div class="mb-3">
+  <%= link_to "Volver a la lección", course_lesson_path(@course, @lesson), class: "btn-back" %>
+</div>

@@ -1,0 +1,35 @@
+<h2> 💯 Tu puntaje para este quiz: <%= @submission.score.round(2) %>%</h2>
+
+<% @quiz.questions.each do |question| %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Question:</h5>
+      <p class="card-text"><%= question.content %></p>
+      <% if question.image.attached? %>
+        <%= image_tag question.image, class: "img-fluid mb-3" %>
+      <% end %>
+      <% 1.upto(4) do |answer_index| %>
+        <% selected_answer = @submission.user_answers[question.id.to_s].to_i %>
+        <div class="form-check">
+          <% if answer_index == question.correct_answer %>
+            <div class="alert alert-success">
+              <strong>Correct answer: </strong> <%= question.send("answer#{answer_index}") %>
+            </div>
+          <% elsif answer_index == selected_answer %>
+            <div class="alert alert-danger">
+              <strong>Your incorrect answer: </strong> <%= question.send("answer#{answer_index}") %>
+            </div>
+          <% else %>
+            <div class="alert alert-secondary">
+              <%= question.send("answer#{answer_index}") %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<div class="mb-3">
+  <%= link_to "Volver", course_lesson_quizzes_path(@course, @lesson), class: "btn-back" %>
+</div>

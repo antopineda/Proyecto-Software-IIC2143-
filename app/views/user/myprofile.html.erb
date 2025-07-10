@@ -1,0 +1,50 @@
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-2">
+            <%= image_tag current_user.profile_picture, alt: "Foto de perfil", class: "profile-image rounded-circle" if current_user.profile_picture.attached? %>
+        </div>
+        <div class="col-8">
+            <h1> <%= current_user.name %> </h1>
+            <h6>
+                <% if current_user.age %> 
+                    <%= current_user.age %> años |
+                <% else %>
+                    <%= "X años |" %>
+                <% end %>
+
+                <% if current_user.college %>
+                    <%= current_user.college %> |
+                <% else %>
+                    <%= "X |" %>
+                <% end %>
+
+                <% if current_user.professor %>
+                    <%= 'Profesor' %>
+                <% else %>
+                    <%= 'Estudiante' %>
+                <% end %>
+            </h6>
+        </div>
+        <div class="row">
+            <div class="col-1">
+            </div>
+            <div class="col-10">
+                <% @courses.each do |course| %>
+                    <div class ="card mt-3">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= link_to course.title, course_path(course) %> | <%= "#{User.find(course.user_id).name}" %> | $<%= course.price %></h5>
+                            <p class="card-text"><%= "#{time_ago_in_words(course.created_at)} ago" %></p>
+                            <p class="card-text"><%= course.description %></p>
+                            <% if current_user %>
+                                <% if current_user.id == course.user_id %>
+                                    <p class="card-text"><%= link_to 'Editar curso', edit_course_path(course), class: "btn btn-info text-white"%></p>
+                                <% end %>
+                            <% end %>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>

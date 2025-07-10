@@ -1,0 +1,98 @@
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-3">
+            <%= image_tag(@user.profile_picture, style:"width:200px; height:200px; border-radius:100px") if @user.profile_picture.attached? %>
+        </div>
+        <div class="col-8">
+            <h1> <%= @user.name %> </h1>
+            <h6>
+                <% if @user.age %> 
+                    <%= @user.age %> años |
+                <% else %>
+                    <%= "X años |" %>
+                <% end %>
+
+                <% if @user.college %>
+                    <%= @user.college %> |
+                <% else %>
+                    <%= "X |" %>
+                <% end %>
+
+                <% if @user.professor %>
+                    <%= 'Profesor' %>
+                <% else %>
+                    <%= 'Estudiante' %>
+                <% end %>
+            </h6>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-1">
+            </div>
+            <div class="col-10">
+                <% if @user.professor %>
+                    <h2>📗 Cursos creados</h2>
+                    <div class="row">
+                        <% if @user.courses.present? %>
+                            <% @user.courses.each do |course| %>
+                                <div class="col-md-4">
+                                    <div class="card mb-4 shadow-sm">
+                                        <div class="card-body">
+                                            <h5 class="card-title
+                                                "><%= link_to course.title, course_path(course), class: "text-decoration-none" %>
+                                            </h5>
+                                            <p class="card-text"><%= course.description %></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% end %>
+                        <% else %>
+                            <p>No tienes cursos creados aún.</p>
+                        <% end %>
+                    </div>
+                <% end %>
+
+                <h2>🎉 Cursos completados </h2>
+                <div class="row">
+                    <% if @completed_courses.present? %>
+                        <% @completed_courses.each do |course| %>
+                            <div class="col-md-4">
+                                <div class="card mb-4 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title         
+                                            "><%= link_to course.title, course_path(course), class: "text-decoration-none" %>
+                                        </h5>
+                                        <p class="card-text"><%= course.description %></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <% end %>
+                    <% else %>
+                        <p>No hay cursos completados aún.</p>
+                    <% end %>
+                </div>
+
+                <h2>⛔ Cursos abandonados</h2>
+                <div class="row">
+                    <% if @user.histories.present? %>
+                        <% @user.histories.each do |course| %>
+                            <div class="col-md-4">
+                                <div class="card mb-4 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title
+                                            "><%= link_to course.title, course_path(course), class: "text-decoration-none" %>
+                                        </h5>
+                                        <p class="card-text"><%= course.description %></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <% end %>
+                    <% else %>
+                        <p>No hay cursos abandonados.</p>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>

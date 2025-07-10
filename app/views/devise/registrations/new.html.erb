@@ -1,0 +1,50 @@
+<h2>Crear cuenta</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <% if resource.errors.any? %>
+    <% flash[:alert] = resource.errors.full_messages.join(", ") %>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name, "Nombre y apellido" %><br />
+    <%= f.text_field :name, autofocus: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password, 'Contraseña' %>
+    <% if @minimum_password_length %>
+    <em>(<%= @minimum_password_length %> caracteres mínimo)</em>
+    <% end %><br />
+    <%= f.password_field :password, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation, 'Confirmación de contraseña' %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+  <%= f.label :professor, "¿Qué tipo de cuenta deseas tener?" %><br />
+  
+  <div class="form-check form-check-inline">
+    <%= f.radio_button :professor, false, id: "student", class: "form-check-input", checked: true %>
+    <label for="student" class="form-check-label">Estudiante</label>
+  </div>
+
+  <div class="form-check form-check-inline">
+    <%= f.radio_button :professor, true, id: "professor", class: "form-check-input" %>
+    <label for="professor" class="form-check-label">Estudiante y Profesor</label>
+  </div>
+</div>
+
+  <div class="actions">
+    <%= f.submit "Crear cuenta", class: "btn btn-success mb-3" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
