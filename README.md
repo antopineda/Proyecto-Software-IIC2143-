@@ -1,7 +1,7 @@
 # ClassMate - Grupo 32
 #### Hecho por Javiera Donoso, Sebastián Passi, Antonia Pineda
 
-Link página web en Render: https://mysite-e15o.onrender.com
+Link página web en Render: https://mysite-e15o.onrender.com (inactivo).
 
 Para el ```admin``` se debe ingresar con la siguiente información: 
 
