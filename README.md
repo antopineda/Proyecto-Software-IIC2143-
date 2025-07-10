@@ -1,5 +1,5 @@
 # ClassMate - Grupo 32
-## Hecho por Javiera Donoso, Sebastián Passi, Antonia Pineda
+#### Hecho por Javiera Donoso, Sebastián Passi, Antonia Pineda
 
 Link página web en Render: https://mysite-e15o.onrender.com
 
